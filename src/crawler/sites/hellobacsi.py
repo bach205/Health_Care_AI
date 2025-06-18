@@ -12,4 +12,4 @@ def crawl() -> list:
     """
     articles = []
     # TODO: Implement HelloBacsi crawling logic
-    return articles 
+    return articles
