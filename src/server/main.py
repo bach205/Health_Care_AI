@@ -1,11 +1,12 @@
 """
 Main FastAPI server for the medical RAG application.
 """
-
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .endpoints import qa, health
+from .controller import qa,documents
 
 app = FastAPI(
     title="Medical RAG API",
@@ -23,9 +24,11 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(qa.router, prefix="/api/v1", tags=["QA"])
-app.include_router(health.router, prefix="/api/v1", tags=["Health"])
+app.include_router(qa.router, prefix="/api/v1/qa", tags=["QA"])
+app.include_router(documents.router,prefix="/api/v1/documents",tags="Documents")
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="0.0.0.0", port=8000) 
+
+#python -m uvicorn main:app --host 0.0.0.0 --port 8000 --workers 1 --reload
