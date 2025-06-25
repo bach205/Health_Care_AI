@@ -32,4 +32,4 @@ app.include_router(documents.router,prefix="/api/v1/documents",tags="Documents")
 #     import uvicorn
 #     uvicorn.run(app, host="0.0.0.0", port=8000) 
 
-#python -m uvicorn main:app --host 0.0.0.0 --port 8000 --workers 1 --reload
+#python -m uvicorn src.server.main:app --host 0.0.0.0 --port 8000 --workers 1
