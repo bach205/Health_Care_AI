@@ -1,5 +1,6 @@
 from .config import load_llms_model_merged
 import torch
+import asyncio
 loaded = load_llms_model_merged()
 model = loaded["model"]
 tokenizer = loaded["tokenizer"]
@@ -15,7 +16,7 @@ async def call_chatbot(question):
   print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 
 
-async def stream_chatbot(question):
+async def stream_chatbot(question:str,queue: asyncio.Queue):
     print("start streaming")
     prompt = tokenizer.apply_chat_template(
         [{"role": "user", "content": question}],
@@ -38,6 +39,7 @@ async def stream_chatbot(question):
             )
         past_key_values = outputs.past_key_values
         for _ in range(1024):  # max_new_tokens
+            await asyncio.sleep(0.05)   # Giả lập thời gian xử lý, nhuong quyen cho task khac
             outputs = model(
                 input_ids=generated[:, -1:],
                 past_key_values=past_key_values,
@@ -55,10 +57,13 @@ async def stream_chatbot(question):
                 is_answer = True
             else:
                 print(new_text, end="", flush=True)
+                # Kiểm tra nếu gặp <eos>
+                if next_token.item() == tokenizer.eos_token_id:
+                    await queue.put(None) # Kết thúc luồng
+                    break
+                await queue.put(new_text)
 
-            # Kiểm tra nếu gặp <eos>
-            if next_token.item() == tokenizer.eos_token_id:
-                break
+            
 
             # Cập nhật
             generated = torch.cat((generated, next_token), dim=1)

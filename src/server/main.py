@@ -6,7 +6,8 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .controller import qa,documents
+from .controller import documents
+# from .controller import qa
 
 app = FastAPI(
     title="Medical RAG API",
@@ -24,7 +25,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(qa.router, prefix="/api/v1/qa", tags=["QA"])
+# app.include_router(qa.router, prefix="/api/v1/qa", tags=["QA"])
 app.include_router(documents.router,prefix="/api/v1/documents",tags="Documents")
 
 # if __name__ == "__main__":
