@@ -23,13 +23,12 @@ HEALTH_CARE_AI/
 
 ## Setup
 
-1. Create a virtual environment:
+1. Create a virtual environment and install dependencies:
 ```bash
-conda create --name myenv python=3.10
-conda activate myenv
+conda env create -f environment.yml
 ```
 
-2. Install dependencies:
+<!-- 2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 pip uninstall -y unstructured
@@ -40,9 +39,9 @@ pip install unstructured
 ```bash
 # Edit .env with your configuration
 # Extend: you need to install torch if you don't have it yet (by default, torch is using cpu cause i don't have gpu in local)
-```
+``` -->
 
-4. Set up dependency application to use Unstructure in local (linux) or you can google "how to use unstructure in local"
+2. Set up dependency application to use Unstructure in local (linux) or you can google "how to use unstructure in local"
 if you want to use unstructure api, you need to 
 ```bash
 # !sudo apt update && sudo apt install -y \
