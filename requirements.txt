@@ -10,3 +10,4 @@ chromadb
 sentence-transformers
 torch
 !pip install "langchain-unstructured[local]" langchain_community langchain_huggingface
+mysql-connector-python

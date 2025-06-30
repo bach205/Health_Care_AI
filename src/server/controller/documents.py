@@ -1,7 +1,6 @@
 from fastapi.responses import StreamingResponse
 import time
-
-from fastapi import APIRouter,FastAPI, UploadFile, File
+from fastapi import APIRouter,FastAPI, UploadFile, File,Form
 from pydantic import BaseModel
 from src.server.service.documentsService import save_documents
 class response(BaseModel):
@@ -10,11 +9,11 @@ class response(BaseModel):
 router = APIRouter()
 
 @router.post("/upload")
-async def document_processing(file: UploadFile = File(...)):
+async def document_processing(file: UploadFile = File(...),user_id: int = Form(...)):
     """
     Save documents.
     """
-    result = await save_documents(file)
+    result = await save_documents(file,user_id)
     return response(
         status=201,
         message={"filename": result.filename, "content_type": result.content_type}
