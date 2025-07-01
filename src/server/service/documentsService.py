@@ -5,7 +5,7 @@ from pathlib import Path
 from docx import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document as LangchainDocument
-from src.server.model.documentsModel import save_documents_to_database,save_chunks_into_chroma
+from src.server.model.documentsModel import save_documents_to_database,save_chunks_into_chroma, delete_document_by_file_name, get_document_location_by_file_name
 from datetime import datetime
 
 UPLOAD_FOLDER = Path(__file__).parent.parent.parent.parent / "documents"
@@ -73,3 +73,26 @@ async def index_documents(path:str):
     docs = await load_docx_to_documents(path)
     chunks = await chunk_docs(docs)
     await save_chunks_into_chroma(chunks)
+
+async def delete_documents(file_name):
+    try:
+        await delete_document_by_file_name(file_name)
+        # Xóa file vật lý trên ổ đĩa
+        file_path = os.path.join(UPLOAD_FOLDER, file_name)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        return True
+    except Exception as e:
+        print(e)
+        raise Exception(e)
+
+async def get_document_file(file_name):
+    # Lấy đường dẫn file từ DB
+    file_location = await get_document_location_by_file_name(file_name)
+    if file_location and os.path.exists(file_location):
+        return file_location
+    # # fallback: thử tìm trực tiếp trong thư mục documents
+    # file_path = os.path.join(UPLOAD_FOLDER, file_name)
+    # if os.path.exists(file_path):
+    #     return file_path
+    return None
