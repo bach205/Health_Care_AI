@@ -6,7 +6,7 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .controller import documents
+from src.server.controller import documentsController
 # from .controller import qa
 
 app = FastAPI(
@@ -26,7 +26,7 @@ app.add_middleware(
 
 # Include routers
 # app.include_router(qa.router, prefix="/api/v1/qa", tags=["QA"])
-app.include_router(documents.router,prefix="/api/v1/documents",tags="Documents")
+app.include_router(documentsController.router,prefix="/api/v1/documents",tags="Documents")
 
 # if __name__ == "__main__":
 #     import uvicorn
