@@ -32,7 +32,7 @@ async def streaming_output(question:str,retrieval_docs:List[str]):
             break
         yield f"data: {item}"
 
-@router.post("/", response_model=Answer)
+@router.get("/", response_model=Answer)
 async def ask_question(question: Question):
     """
     Ask a medical question and get an answer using RAG.
