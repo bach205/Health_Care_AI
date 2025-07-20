@@ -23,7 +23,7 @@ async def streaming_output(question:str,retrieval_docs:List[str]):
     queue = asyncio.Queue()
 
     # Tạo 1 task chạy song song
-    asyncio.create_task(stream_chatbot(question,retrieval_docs,queue))
+    asyncio.create_task(stream_chatbot(question,retrieval_docs,queue,False))
 
     while True:
         item = await queue.get()
@@ -45,7 +45,8 @@ async def ask_question(question: str):
         )
         documents = results["documents"][0]
         scores = results["distances"][0]
-        threshold = 0.6 
+        print(scores)
+        threshold = 0.3
         filtered_docs = [
             doc for doc, score in zip(documents, scores) if score < threshold
         ]
