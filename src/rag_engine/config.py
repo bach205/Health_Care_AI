@@ -41,13 +41,14 @@ def load_llms_model_merged(base_model_path=None,peft_model_path=None):
     base_model = AutoModelForCausalLM.from_pretrained(base_model_path)
     base_tokenizer = AutoTokenizer.from_pretrained(base_tokenizer_path)
 
-    # Load the additional model to merge
-    if(peft_model_path == None):
-        peft_model_path = MODELS_DIR / "llm" / "v1" / "fine_tuned_model"
-    peft_model = PeftModel.from_pretrained(base_model, peft_model_path)
-    # Merge the models (example: parameter averaging or other techniques)
-    merged_model = peft_model.merge_and_unload()
+    # # Load the additional model to merge
+    # if(peft_model_path == None):
+    #     peft_model_path = MODELS_DIR / "llm" / "v1" / "fine_tuned_model"
+    # peft_model = PeftModel.from_pretrained(base_model, peft_model_path)
+    # # Merge the models (example: parameter averaging or other techniques)
+    # merged_model = peft_model.merge_and_unload()
 
+    merged_model = base_model
     # Return the merged model and tokenizer
     merged_model.eval()  # Set the model to evaluation mode
     return {"model": merged_model, "tokenizer": base_tokenizer}
