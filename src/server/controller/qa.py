@@ -38,8 +38,18 @@ async def ask_question(question: str):
     Ask a medical question and get an answer using RAG.
     """
     try:
-        #add retrival function
-        retrieval_docs = collection.query(query_texts=[question],include=["documents"])["documents"][0]
+        results = collection.query(
+            query_texts=[question],
+            include=["documents", "distances"],  # hoặc "embeddings", tùy cách bạn config
+            n_results=10  # lấy nhiều hơn 5 để có dữ liệu lọc
+        )
+        documents = results["documents"][0]
+        scores = results["distances"][0]
+        threshold = 0.6 
+        filtered_docs = [
+            doc for doc, score in zip(documents, scores) if score < threshold
+        ]
+        retrieval_docs = filtered_docs[:5]
         return StreamingResponse(
             streaming_output(question,retrieval_docs),
             media_type="text/event-stream"
